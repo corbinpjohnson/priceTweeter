@@ -1,39 +1,33 @@
-__author__ = 'corbinq27'
-
 import json
 from time import gmtime, strftime
 from scrapely import Scraper
+
+from config import load_config
 
 
 class CreateData():
 
     def __init__(self):
-        pass
+        self.config = load_config()
 
     def create_data(self):
-        training_url = "http://www.wholesalegaming.biz/startrek/trekalphastarterbox/"
-        data_training = {"product": "Star Trek Alpha Unlimited Starter Box", "price": "$15.00"}
+        training = self.config["training"]
 
-        #train scrapely
+        #train scrapely on a single sample product page from your target site
         scraper = Scraper()
+        scraper.train(training["url"], training["sample"])
 
-        scraper.train(training_url, data_training)
-
-        #get the URLs to check
-
-        page_json = file("pages_to_check.json").read()
-
-        #format (all strings in unicode) : {"urls" : [ <url1 string>, <url2 string>, ... , <urln string> ] }
-        urls_to_check = json.loads(page_json)
+        #the product pages to check, taken straight from config
+        urls_to_check = self.config["product_urls"]
 
         #get data
 
         #dictionary with "product name": "price"
         price_list = {}
 
-        for each_url in urls_to_check["urls"]:
+        for each_url in urls_to_check:
             scraped_data = scraper.scrape(each_url)
-            #example of a scraped data: [{u'price': [u'&nbsp;$15.00&nbsp;'], u'product': [u'Star Trek Alpha Unlimited Starter Box']}]
+            #example of a scraped data: [{u'price': [u'&nbsp;$15.00&nbsp;'], u'product': [u'Sample Product Name']}]
 
             #let's sanitize the price to a float and make this a dictionary entry
             dollar_string = scraped_data[0]["price"][0].replace("&nbsp;","")

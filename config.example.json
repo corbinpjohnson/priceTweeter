@@ -1,0 +1,31 @@
+{
+    "training": {
+        "url": "http://example.com/store/sample-product/",
+        "sample": {
+            "product": "Sample Product Name",
+            "price": "$19.99"
+        }
+    },
+    "product_urls": [
+        "http://example.com/store/product-one/",
+        "http://example.com/store/product-two/"
+    ],
+    "twitter": {
+        "APP_KEY": "",
+        "APP_SECRET": "",
+        "OAUTH_TOKEN": "",
+        "OAUTH_TOKEN_SECRET": "",
+        "GOOGLE_URL_SHORTENER_KEY": ""
+    },
+    "s3": {
+        "aws_access_key_id": "",
+        "aws_secret_access_key": "",
+        "bucket": "your-s3-bucket-name"
+    },
+    "tweets": {
+        "discontinued": "%(product)s no longer for sale. %(url)s",
+        "new_product": "%(product)s now available! $%(price)s. %(url)s",
+        "price_change": "New price for %(product)s: $%(price)s. Was $%(was)s. %(url)s"
+    },
+    "fallback_short_url": "http://example.com"
+}

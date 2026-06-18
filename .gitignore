@@ -1,0 +1,6 @@
+# Local configuration with secrets
+config.json
+
+# Python
+*.pyc
+__pycache__/

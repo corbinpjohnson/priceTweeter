@@ -1,20 +1,22 @@
 import boto3
 
+from config import load_config
+
+# State files kept in S3 between runs.
+STATE_FILES = ("prices-recent.json", "price-comparison-recent.json")
+
+
 class FileDownload:
 
     def __init__(self):
-        aws_access_key_id = "ExampleAccessString" #insert your access id
-        aws_secret_access_key = "ExampleAccessKey" #insert your access key
-        s3_bucket_name = "your-s3-bucket-name" #inster your s3 bucket
-
+        s3_config = load_config()["s3"]
+        self.aws_access_key_id = s3_config["aws_access_key_id"]
+        self.aws_secret_access_key = s3_config["aws_secret_access_key"]
+        self.s3_bucket_name = s3_config["bucket"]
 
     def file_download(self):
-        s3 = boto3.client('s3', aws_access_key_id=aws_access_key_id ,aws_secret_access_key=aws_secret_access_key)
+        s3 = boto3.client('s3', aws_access_key_id=self.aws_access_key_id,
+                          aws_secret_access_key=self.aws_secret_access_key)
 
-        # Download tmp.txt as tmp2.txt
-        s3.download_file(s3_bucket_name, "price-comparison-recent.json", "/tmp/price-comparison-recent.json")
-        s3.download_file(s3_bucket_name, "hills_urls.json", "/tmp/hills_urls.json")
-        s3.download_file(s3_bucket_name, "1E-hills-prices-recent.json", "/tmp/1E-hills-prices-recent.json")
-        s3.download_file(s3_bucket_name, "pages_to_check.json", "/tmp/pages_to_check.json")
-        s3.download_file(s3_bucket_name, "pages_to_check_test.json", "/tmp/pages_to_check_test.json")
-        s3.download_file(s3_bucket_name, "prices-recent.json", "/tmp/prices-recent.json")
+        for name in STATE_FILES:
+            s3.download_file(self.s3_bucket_name, name, "/tmp/%s" % name)

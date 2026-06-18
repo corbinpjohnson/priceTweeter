@@ -1,0 +1,5 @@
+scrapely
+twython
+pyshorteners
+requests
+boto3
